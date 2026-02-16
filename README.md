@@ -47,9 +47,10 @@ npm install -g quikly-mcp-server
 npm install quikly-mcp-server
 ```
 
-### Option C: From source (monorepo / dev)
+### Option C: From source (dev / fallback)
 
 ```bash
+git clone https://github.com/exequiel-mas/quikly-mcp-server
 cd quikly-mcp-server
 npm install
 npm run build
@@ -68,11 +69,13 @@ The server requires two environment variables:
 
 ## Client configuration
 
-This server uses **MCP over stdio**, compatible with Cursor, Claude Code, and other MCP clients.
+This server uses **MCP over stdio**, compatible with Cursor, Claude Desktop, Claude Code, and other MCP clients.
 
-### Cursor (`.cursor/mcp.json`)
+All clients use the same structure: `command`, `args`, and `env`. Replace `TU_API_KEY` with your [Quikly API key](https://app.getquikly.com/settings/api-keys). See `.mcp.json.example` in this package for a copy-paste template.
 
-**Using npx (recommended):**
+### Cursor
+
+**Config file:** `~/.cursor/mcp.json` (global) or `proyecto/.cursor/mcp.json` (per-project)
 
 ```json
 {
@@ -82,33 +85,41 @@ This server uses **MCP over stdio**, compatible with Cursor, Claude Code, and ot
       "args": ["-y", "quikly-mcp-server"],
       "env": {
         "QUIKLY_API_BASE_URL": "https://api.getquikly.com/api/external/v1",
-        "QUIKLY_API_KEY": "${QUIKLY_API_KEY}"
+        "QUIKLY_API_KEY": "TU_API_KEY"
       }
     }
   }
 }
 ```
 
-**Using local build (from monorepo):**
+### Claude Desktop
+
+**Config file:**
+- Windows: `%APPDATA%\Claude\claude_desktop_config.json`
+- macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
+
+Edit via **Claude menu → Settings → Developer → Edit Config**.
 
 ```json
 {
   "mcpServers": {
     "quikly": {
-      "command": "node",
-      "args": ["./quikly-mcp-server/dist/index.js"],
+      "command": "npx",
+      "args": ["-y", "quikly-mcp-server"],
       "env": {
         "QUIKLY_API_BASE_URL": "https://api.getquikly.com/api/external/v1",
-        "QUIKLY_API_KEY": "${QUIKLY_API_KEY}"
+        "QUIKLY_API_KEY": "TU_API_KEY"
       }
     }
   }
 }
 ```
 
-### Claude Code (`.mcp.json`)
+Restart Claude Desktop completely after saving.
 
-**Using npx:**
+### Claude Code (Claude for VS Code / CLI)
+
+**Config file:** `.mcp.json` in project or home
 
 ```json
 {
@@ -119,7 +130,7 @@ This server uses **MCP over stdio**, compatible with Cursor, Claude Code, and ot
       "args": ["-y", "quikly-mcp-server"],
       "env": {
         "QUIKLY_API_BASE_URL": "https://api.getquikly.com/api/external/v1",
-        "QUIKLY_API_KEY": "${QUIKLY_API_KEY}"
+        "QUIKLY_API_KEY": "TU_API_KEY"
       }
     }
   }
@@ -134,9 +145,42 @@ claude mcp add --transport stdio --scope project quikly -- npx -y quikly-mcp-ser
 
 Set `QUIKLY_API_BASE_URL` and `QUIKLY_API_KEY` in your environment before running.
 
-### Windows
+### Fallback: Windows / npx fails
 
-If `npx` or variable expansion fails on Windows, use `node` with the full path to `dist/index.js` and ensure env vars are set in the shell or system.
+If `npx` fails (e.g. on some Windows setups), use a local build:
+
+1. `git clone https://github.com/exequiel-mas/quikly-mcp-server && cd quikly-mcp-server`
+2. `npm install && npm run build`
+3. Use `node` with the full path to `dist/index.js`:
+
+```json
+{
+  "mcpServers": {
+    "quikly": {
+      "command": "node",
+      "args": ["C:/path/to/quikly-mcp-server/dist/index.js"],
+      "env": {
+        "QUIKLY_API_BASE_URL": "https://api.getquikly.com/api/external/v1",
+        "QUIKLY_API_KEY": "TU_API_KEY"
+      }
+    }
+  }
+}
+```
+
+Or install globally: `npm install -g quikly-mcp-server`, then use `"command": "quikly-mcp-server"` with no `args`.
+
+**Windows PowerShell wrapper** (if env vars are in system, not mcp.json):
+
+```json
+"quikly": {
+  "command": "powershell",
+  "args": ["-ExecutionPolicy", "Bypass", "-File", "C:/path/to/node_modules/quikly-mcp-server/scripts/run-quikly-mcp.ps1"],
+  "env": {}
+}
+```
+
+After `npm install quikly-mcp-server` in your project, the script is at `node_modules/quikly-mcp-server/scripts/run-quikly-mcp.ps1`.
 
 ## Development
 

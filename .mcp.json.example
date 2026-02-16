@@ -1,12 +1,11 @@
 {
   "mcpServers": {
     "quikly": {
-      "type": "stdio",
       "command": "npx",
       "args": ["-y", "quikly-mcp-server"],
       "env": {
         "QUIKLY_API_BASE_URL": "https://api.getquikly.com/api/external/v1",
-        "QUIKLY_API_KEY": "${QUIKLY_API_KEY}"
+        "QUIKLY_API_KEY": "YOUR_QUIKLY_API_KEY"
       }
     }
   }

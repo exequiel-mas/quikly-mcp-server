@@ -1,6 +1,6 @@
 {
   "name": "quikly-mcp-server",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "MCP server exposing Quikly.ai external API as tools for Cursor, Claude Code, and other MCP clients",
   "type": "module",
   "main": "dist/index.js",
@@ -10,10 +10,12 @@
   },
   "files": [
     "dist",
+    "scripts",
     "README.md",
     "CHANGELOG.md",
     "LICENSE",
-    ".env.example"
+    ".env.example",
+    ".mcp.json.example"
   ],
   "scripts": {
     "dev": "tsx src/index.ts",
