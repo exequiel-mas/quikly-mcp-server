@@ -1,0 +1,59 @@
+{
+  "name": "quikly-mcp-server",
+  "version": "0.1.0",
+  "description": "MCP server exposing Quikly.ai external API as tools for Cursor, Claude Code, and other MCP clients",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "quikly-mcp-server": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    ".env.example"
+  ],
+  "scripts": {
+    "dev": "tsx src/index.ts",
+    "build": "tsup src/index.ts --format esm --dts --clean",
+    "start": "node dist/index.js",
+    "prepublishOnly": "npm run build",
+    "test": "vitest run --config ./vitest.config.ts",
+    "test:integration": "vitest run --config ./vitest.integration.config.ts",
+    "test:watch": "vitest --config ./vitest.config.ts"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.26.0",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@types/node": "^25.2.3",
+    "tsup": "^8.5.1",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "quikly",
+    "proposals",
+    "cursor",
+    "claude",
+    "ai"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/exequiel-mas/quikly-mcp-server.git"
+  },
+  "homepage": "https://github.com/exequiel-mas/quikly-mcp-server#readme",
+  "bugs": {
+    "url": "https://github.com/exequiel-mas/quikly-mcp-server/issues"
+  }
+}
