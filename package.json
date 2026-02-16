@@ -1,6 +1,6 @@
 {
   "name": "quikly-mcp-server",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "MCP server exposing Quikly.ai external API as tools for Cursor, Claude Code, and other MCP clients",
   "type": "module",
   "main": "dist/index.js",
